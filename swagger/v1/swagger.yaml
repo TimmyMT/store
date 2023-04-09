@@ -1,0 +1,141 @@
+---
+openapi: 3.0.1
+info:
+  title: API V1
+  version: v1
+paths:
+  "/api/v1/items":
+    get:
+      summary: returns current condition
+      tags:
+      - Items
+      responses:
+        '200':
+          description: Return items list
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/items_array"
+    post:
+      summary: creates new item
+      tags:
+      - Items
+      parameters: []
+      responses:
+        '201':
+          description: Return created item
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/item"
+        '400':
+          description: Not creates new item
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                item:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    description:
+                      type: string
+                  required:
+                  - name
+                  - description
+              required:
+              - item
+  "/api/v1/items/{id}":
+    patch:
+      summary: Updates item
+      tags:
+      - Items
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Updates item
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/item"
+        '400':
+          description: Not updates item
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                item:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    description:
+                      type: string
+                  required:
+                  - name
+                  - description
+              required:
+              - item
+    delete:
+      summary: Deletes item
+      tags:
+      - Items
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Deletes item
+    get:
+      summary: Fetch item
+      tags:
+      - Items
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Fetch item
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/item"
+servers:
+- url: http://localhost:3000
+  variables:
+    defaultHost:
+      default: www.example.com
+components:
+  schemas:
+    item:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+      required:
+      - id
+      - name
+    items_array:
+      type: array
+      items:
+        "$ref": "#/components/schemas/item"

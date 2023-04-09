@@ -1,0 +1,25 @@
+version: "3"
+services:
+  web:
+    build: .
+    command: sh -c "rm -f tmp/pids/server.pid && /app/bin/rails s -b 0.0.0.0 -p 3000"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    volumes:
+      - .:/app
+    environment:
+      DATABASE_URL: postgres://postgres:password@db:5432/clothing_store_development
+    tty: true
+    stdin_open: true
+
+  db:
+    image: postgres:13
+    volumes:
+      - pg:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: password
+
+volumes:
+  pg:
